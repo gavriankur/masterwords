@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Master Words</title>
+<style>
+:root{--bg:#faf8f4;--fg:#1c1b19;--mute:#8a867d;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#15140f;--fg:#f1ede4;--mute:#7c786d}}
+:root[data-theme="dark"]{--bg:#15140f;--fg:#f1ede4;--mute:#7c786d}
+html,body{height:100%;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",serif;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;user-select:none;-webkit-user-select:none;overflow:hidden}
+#w{text-align:center;padding:0 6vw;max-width:94vw;line-height:1.15;font-weight:600;letter-spacing:-.01em;overflow-wrap:break-word}
+#c{font:600 15px system-ui,sans-serif;color:var(--fg);opacity:.7;font-variant-numeric:tabular-nums}
+.b{font:600 15px system-ui,sans-serif;color:var(--fg);background:transparent;border:1.5px solid var(--mute);border-radius:999px;padding:8px 18px;cursor:pointer}
+.b:hover{background:var(--fg);color:var(--bg)}
+#r{display:flex;gap:12px}
+#top{position:fixed;top:calc(env(safe-area-inset-top,0px) + 14px);left:0;right:0;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 16px;z-index:5;cursor:default}
+#sb{position:relative;width:min(620px,100%)}
+#res[hidden]{display:none}
+#q{width:100%;box-sizing:border-box;font:18px system-ui,sans-serif;padding:12px 22px;border:1.5px solid var(--mute);border-radius:999px;background:var(--bg);color:var(--fg);outline:none;box-shadow:0 1px 6px rgba(0,0,0,.08)}
+#q:focus{border-color:var(--fg)}
+#res{position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:60vh;overflow-y:auto;background:var(--bg);border:1px solid var(--mute);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.2);padding:6px;text-align:left}
+.it{padding:10px 12px;font:17px Georgia,serif;border-radius:8px;cursor:pointer;display:flex;gap:12px;color:var(--fg)}
+.it span{color:var(--mute);font:13px system-ui,sans-serif;min-width:36px;padding-top:3px}
+.it.on,.it:hover{background:rgba(128,128,128,.18)}
+#h{position:fixed;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);font:13px system-ui,sans-serif;color:var(--mute);text-align:center;padding:0 12px;display:flex;flex-direction:column;align-items:center;gap:10px}
+</style>
+</head>
+<body>
+<div id="top" onclick="event.stopPropagation()"><div id="sb"><input id="q" type="text" placeholder="Search words and phrases…" autocomplete="off" spellcheck="false"><div id="res" hidden></div></div><div id="c"></div></div>
+<div id="w"></div>
+<div id="h"><div id="r"><button class="b" onclick="event.stopPropagation();skip(-50)">« 50</button><button class="b" onclick="event.stopPropagation();skip(50)">50 »</button></div><div>Space / → / tap: next &nbsp;·&nbsp; ← / Shift+Space: back &nbsp;·&nbsp; ↓ / PgDn: +50 &nbsp;·&nbsp; ↑ / PgUp: −50 &nbsp;·&nbsp; S: shuffle &nbsp;·&nbsp; / : search</div></div>
+<script>
+const RAW = `Framework
+Pivotal role
+Black swan event
+grounded
+essential
+pugnacious
+dogmatic
+manifest
+don't self edit
+vote of confidence
+drive things forward
+tech perspective
+bull in a china shop
+snowball effect
+ear to the ground
+comradry
+workloads
+Irish sweepstakes
+new broom sweeps clean
+prolific
+workstreams
+straw man
+fort knox security
+product rationalisation
+software defined layers
+David and Goliath
+finger int he air
+extrapolate
+complacency
+perseverance+Talent = Luck
+Bane of my existence
+yin and yang
+optimize
+workflow
+Kfasque
+copacetic
+stopgap
+integrity
+innovation
+optimism
+ipso facto
+drive
+suberfuge
+judgement
+undertow
+stragegy circadian rhythm
+whilrwind
+benovolance
+time and persistence
+growing pains
+rite of passage
+thought leadership
+tailored boundaries
+paradigm shift
+prima-dona
+lofty goal
+carve out
+gravy train
+flintstone tools
+stoic
+leaky bucket
+canary in the coalmine
+crawl, walk, run
+long pole in the tent
+critical decision point
+acceleration points and lever
+proverbial next level
+excelsior
+ebb and flow
+tangible
+in profile
+endorphins/dopamine
+serotonin
+phenomenal
+slippery slope
+preaching to the choir
+life work balance
+cut the mustard
+analysis paralysis
+pura vida
+conviction
+weather the storm
+fly on the wall
+earmarked
+run forward to stay in one place
+fundamental
+foundational insights
+SMART - specific, measurable, achievable, relevant, time bound
+economies of scale
+STP - segmentation, targeting, and Postering
+Nither
+tailwind
+sense of purpose & mission
+smokes and mirrors
+prolific
+nature of the beast
+crystal ball
+observability
+fallacy
+12 labours of Hercules
+savant
+synergies
+optimised
+yardstick
+modernisation
+reliability
+artefacts
+deployment
+peripheral vision
+usability
+living document
+belabour the point
+retrospect
+figuring out where is floor and ceiling
+knock down barriers
+security is a shared responsibility
+openness, rationality, honesty
+hamster wheel never stops spinning
+hatchet job
+meeting of minds needed
+avoid like plague
+CAN - conditions, action, needs
+NEWS - north, east west south - boss, direct report,s takelhoders , customer
+quantum experience
+parlay
+dell's end to end portfolio
+vertical slicing
+aop - annual operating budget
+irish sweepstakes
+sundry
+macro economics
+progression
+sunk cost
+landlocked
+your cross to bear
+go-do
+elements
+aligned
+flawless
+complacent
+visibility
+timeframes
+causality
+Low hanging fruit
+Shuffle the deck chairs on Titanic
+Firefighting activities
+Utopia
+Spectrum
+Reading the tealeaves
+White - label
+PIE - performance, image, exposure
+Resilience
+Sustainable
+Circle of trust
+When rubber meets the road
+Turing test
+Finding the rhythm
+Non disruptive way
+Wet cement
+Osmosis
+Devops vs devesecops
+Icarus tale of 2 cities
+Cliff note versions
+Carte blanche
+Hemm and haw
+Table stakes
+agnostic
+Pipeline
+Skunkworks
+Release roadmap
+Enrich bottomline
+Pile-on-effect
+Strategically
+Industry leaders
+Catalyst
+Hit the ground running
+Cautiously optimistic
+Drain the slides
+Fail fast and pivot
+Take bull by the horn
+Eureka
+Evangelist
+Edmund hillary -everest
+Optimize
+STAR - Situation, task, action, results
+Lost in the ether
+Humble pie
+Bottomless bucket of cash
+Fork in the road
+Elevator pitch
+Multimodal
+Motley crew
+Ragtag
+Stretch goal
+Modality of data
+Lofty goal
+Wireframe
+Stowaway
+Air gap
+Lagging and lead measure
+Tooth comb
+5 why
+Shanghaied
+Delta
+Railroad
+Toilwork
+Gravy train
+There are decades when nothing happens and then there are weeks where decades happen
+Allowed tail to wag the dog
+Standard modality
+Lockstep
+Multifaceted
+Hypercare
+Radical simplification
+Lethargy of decision making
+Siloes
+Growth mindset
+Trail blazers
+Throw in the towel
+RPE - resume producing event
+Storming forming
+Non functional requirements
+Knee-jerk reaction
+figleaf
+Pain is knowledge rushing in to fill the void at great speed
+If you are going through hell, keep going
+Every job looks easy if you are not the one doing it
+Leap of faith
+Spectrum
+Grass is always greener on the side fertilised with bullshit
+Ducks in the row
+Putting why before the what
+Flintstone tools
+Not my circus, not my monkey
+History doesn't repeat itself; it rhymes
+Long winded
+A watched pot never boils
+What begins in anger, ends in suffering
+Regret is worse than failure
+Talk is cheap
+This too shall pass
+PICNIC. - problems in Chair, not in computer
+Who got rich during gold rush? Men who sold shovels. Nvidia's gpu are shovels and ai is gold rush
+Chaos theory
+Jal, janini, jamin - reasons for wars
+If you don't pick a day to rest, your body will pick it for you.
+Zindagi badi honi chahiye lambi nahi
+Problem of plenty
+Bend with the Breeze
+Prevent sins from our past
+New nut in the trail mix
+recee
+Stake in the ground
+Grief is price we play for love
+Opponent vs enemy sports teaches that
+Tyranny of choice
+The reason 9-5 offices are so cold is because you're surrounded by the ghosts of people's dead hopes and dreams
+Show of faith
+Death march from minefield
+Pivot while maintaining core values
+Nvidia is same as shovel sellers during gold rush.
+"Out of hatred for the cockroach, the ants voted for the insecticide. They all died, including the housefly that didn't vote."
+Push the button, get the banana
+Are you a machine gun or sniper?
+When you speak in learned language, the mind listens. When you speak in native language, the heart listens
+Your intuitions will speak to you in statements and your anxiety will speak to you in questions
+Solomon's paradox
+Baader–Meinhof effect. Once you learn something new, you'll suddenly start noticing it everywhere, not because it's appearing more often, but because your brain is paying more attention to it.
+hedonic treadmill
+Sell entertainment, convenience, lust, hope
+ethos
+battle tested diplomacy
+extrapolate
+inerlock
+adoptions%
+pivot
+firefight
+tangible
+tactical
+delusions of grandeur
+checks and balances
+coup de grace
+pushing the envelope
+bought ticket to titanic
+hanlon razor
+self regulation
+verbatim/paraphrase
+putting why before what
+synergies
+hope isn't a strategy
+nature of the beast
+pie in the sky
+exigencies
+playbook
+galvanising
+dormant
+fly on the wall
+too many cooks spoil the broth
+a camel is a horse designed by a committee
+harness the muscle of organisation
+excelsior
+battle cry
+soup to nuts
+stability
+component
+cascade
+realm
+flipside
+scale
+stretch goal
+rinse and repeat
+rallying the troops
+opex, capex
+onwards and upwards
+poke the nest
+slice and dice data
+woe is me
+tip the scales
+baptism by fire
+ducks int he row
+sing for your supper
+skewed views
+dust on our glasses
+smoking gun
+chasing the while whale
+red tape
+that old chestnut
+double down
+trading partners seldom wage wars
+devil's bargain
+Moor's law - the cost of hardware goes down with time.
+bee in the bonet
+Swiss army knife of IT teams
+comprehensive
+brass tacks
+Geriatric
+crucible
+for good measure
+global friendly hours
+equipped with ools and resources
+move the dial
+elementary
+spans and layers
+detail oriented
+foundation
+voice and tone
+consexual
+hyper connected world
+meticulously
+reminisced
+drink your own champagne
+measure twice, cut once
+osmosis
+discipline, consistency and persistence
+resting on our laurels
+muscle of documentation
+seeing storm brewing
+frog in the throat
+long winded
+retrofit
+telemetry
+risk profile
+resilient
+way station
+cicid
+constrained
+pipe dream
+dancing between the raindrops
+hail mary
+bleeding edge of technology
+managed services
+perfect storm
+3 points don't make a line
+topline growth
+context aware
+managing a fleet
+implementation
+deep integration
+game changing
+privacy
+global talent pool
+reinvent the wheel
+naturally ambitious
+as real as gravity
+consistent
+throttle
+Chinese whispers
+robust
+keep throwing mud at the wall, some will stick
+Ebb and flow
+FMEA - failure mode effect analysis
+thumbnail sketch
+minutiae
+global service footprint
+hamlet moment
+snake oil salesman
+best laid schemes of mice and men
+barometer of performance
+piece de resistance
+boilerplate
+machine learning
+MAP - management, action, plan
+Gravitas
+AI algorithm
+strategic roadmap
+latest and greatest
+ecosystem
+horse in the race
+Hedge your bets
+Lessons earned, not learned
+Macro picture
+Horse whisperer
+Hockey stick graph
+A healthy mix of greed and ambition
+Industry standard architecture
+Parley
+Kumbaya effect
+Checkpoint
+Regression testing
+Litmus test
+Dojo model
+Discovery begets more fields of inquiry and it goes on.
+We didn't put Webb telescope and end there. It begets more.
+Science, knowledge etc.
+Standardize, simplify, automate
+We are exceptional at creating exceptions
+Cart before the horse
+Copacetic
+Ethos
+Encore
+Yin and Yang
+Stopgap
+Savant
+Vayocondios
+Ipso facto
+Tip the scales
+Subterfuge
+Quantify
+Throes
+System of record
+Undertow
+Kafaesque
+Deadcatting
+Wet blanket
+Kraken
+Aspirational
+Ideation
+Inflection point
+Sigma
+Manifestation
+Circular economy
+Tailwind
+Compare and contrast
+Reductive
+Phenomenal
+Way markers
+Aspect
+Poi-sting
+utopia
+Hubris
+A goal without a plan is just a wish
+Sunk cost
+Eureka moment
+Trying to kill a fly with a bazooka
+Penny wise , pound foolish
+Walking billboard of inspiration
+Slice and dice data
+Knock down barrier
+To a man with hammer, every problem is a nail
+Heavy lies the crown
+Run full speed and crash into a wall
+Ear to the ground
+You can never overs invest in education
+Parameters
+If Tom kills Jerry, show is over
+Like taxes and death, this is given
+Ships don't sink because of the water around them. Ships sink because of the water that gets in them
+Amidst rough seas, you need a steady sailor
+Sometimes life feels like soup and you're a fork.
+Recency Bias
+Flywheel
+Never touch a running system
+Resonate
+Recency bias
+Maintenance surface area
+Casandra prophecy
+Dune - foundational prophecy for Paul as prophet/God. Jesus, Kalki
+Force multiplier
+Until death all defeat is psychological
+Chivas Regal effect
+Dichotomy
+Emotion pe control hai, car me petrol hai
+Don't start it but end it ; pehle chedo mat but for chodo mat
+Myriad
+The generals will fight till the last drop of your blood
+Splitting hair
+Receptive to business desires
+HA availability on people level
+Drinking from a firehose
+Feedback loop
+Chink in the armour
+Nature vs nurture
+Don't complain about having too much on your plate if your goal was to eat
+Rank and yank
+I want onion to taste like peach, so that's ok
+Enemy vs competitor – importance of sports.
+Man in the mirror keeps getting old.
+A leaky roof can fool the sunshine, but not the rain
+Opposite of love is not hate, it's indifference
+Equilibrium
+Jab tak karela nahi dikhaunga, tab tak bhindi kaise khayenge
+Dil me jigar, competitors pe nazar
+Gps theory - recalculate without being judgemental
+Maslow's hierarchy
+Nautical`;
+
+// de-duplicate (case-insensitive), keep first occurrence
+const seen = new Set();
+let items = RAW.split("\n").map(s => s.trim()).filter(Boolean).filter(s => {
+  const k = s.toLowerCase();
+  if (seen.has(k)) return false;
+  seen.add(k); return true;
+});
+const original = items.slice();
+let i = 0;
+const w = document.getElementById("w"), c = document.getElementById("c");
+
+function show() {
+  const t = items[i];
+  w.textContent = t;
+  const n = t.length;
+  let vw = n <= 8 ? 14 : n <= 16 ? 10 : n <= 30 ? 6.5 : n <= 60 ? 4.2 : n <= 110 ? 3.2 : 2.5;
+  w.style.fontSize = "min(" + vw + "vw, " + (vw * 1.1) + "vh)";
+  if (window.innerWidth < 700) w.style.fontSize = (n <= 8 ? 15 : n <= 16 ? 11 : n <= 30 ? 8 : n <= 60 ? 6 : n <= 110 ? 4.6 : 3.8) + "vw";
+  c.textContent = "Word " + (i + 1) + " of " + items.length;
+}
+function next() { i = (i + 1) % items.length; show(); }
+function skip(d) { i = Math.min(Math.max(i + d, 0), items.length - 1); show(); }
+
+const resEl = document.getElementById("res"), sEl = resEl, qEl = document.getElementById("q");
+let hits = [], act = 0;
+function renderS() {
+  const t = qEl.value.trim().toLowerCase();
+  hits = []; act = 0;
+  if (!t) { sEl.hidden = true; return; }
+  for (let k = 0; k < items.length; k++) if (items[k].toLowerCase().includes(t)) hits.push(k);
+  sEl.hidden = false; drawS();
+}
+function drawS() {
+  resEl.innerHTML = "";
+  const info = document.createElement("div");
+  info.style.cssText = "font:13px system-ui,sans-serif;color:var(--mute);padding:4px 12px";
+  info.textContent = hits.length + " match" + (hits.length === 1 ? "" : "es") + (hits.length > 200 ? " (showing first 200)" : "");
+  resEl.appendChild(info);
+  hits.slice(0, 200).forEach((k, n) => {
+    const d = document.createElement("div");
+    d.className = "it" + (n === act ? " on" : "");
+    const num = document.createElement("span"); num.textContent = k + 1;
+    const tx = document.createElement("div"); tx.textContent = items[k];
+    d.append(num, tx); d.onclick = () => goS(k); resEl.appendChild(d);
+  });
+}
+function goS(k) { i = k; qEl.value = ""; closeS(); show(); }
+function openS() { qEl.focus(); qEl.select(); }
+function closeS() { sEl.hidden = true; qEl.blur(); }
+function scrollAct() { const el = resEl.querySelector(".on"); if (el) el.scrollIntoView({ block: "nearest" }); }
+function searchKey(e) {
+  const m = Math.min(hits.length, 200);
+  if (e.key === "Escape") { e.preventDefault(); closeS(); }
+  else if (e.key === "Enter") { e.preventDefault(); if (hits.length) goS(hits[act]); }
+  else if (e.key === "ArrowDown") { e.preventDefault(); act = Math.max(0, Math.min(act + 1, m - 1)); drawS(); scrollAct(); }
+  else if (e.key === "ArrowUp") { e.preventDefault(); act = Math.max(act - 1, 0); drawS(); scrollAct(); }
+}
+qEl.addEventListener("input", renderS);
+qEl.addEventListener("focus", renderS);
+function prev() { i = (i - 1 + items.length) % items.length; show(); }
+function shuffle() {
+  if (items[0] === original[0] && items.join() === original.join()) {
+    for (let a = items.length - 1; a > 0; a--) { const b = Math.floor(Math.random() * (a + 1)); [items[a], items[b]] = [items[b], items[a]]; }
+  } else items = original.slice();
+  i = 0; show();
+}
+document.addEventListener("keydown", e => {
+  if (document.activeElement === qEl) { searchKey(e); return; }
+  if (e.key === "/" || ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "f")) { e.preventDefault(); openS(); return; }
+  if (e.code === "Space") { e.preventDefault(); e.shiftKey ? prev() : next(); }
+  else if (e.key === "ArrowRight" || e.key === "Enter") next();
+  else if (e.key === "ArrowLeft" || e.key === "Backspace") prev();
+  else if (e.key === "ArrowDown" || e.key === "PageDown") { e.preventDefault(); skip(50); }
+  else if (e.key === "ArrowUp" || e.key === "PageUp") { e.preventDefault(); skip(-50); }
+  else if (e.key.toLowerCase() === "s") shuffle();
+});
+document.body.addEventListener("click", () => { if (!sEl.hidden || document.activeElement === qEl) { closeS(); return; } next(); });
+window.addEventListener("resize", show);
+show();
+</script>
+</body>
+</html>
