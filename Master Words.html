@@ -20,6 +20,10 @@ body{background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",
 #res[hidden]{display:none}
 #q{width:100%;box-sizing:border-box;font:18px system-ui,sans-serif;padding:12px 22px;border:1.5px solid var(--mute);border-radius:999px;background:var(--bg);color:var(--fg);outline:none;box-shadow:0 1px 6px rgba(0,0,0,.08)}
 #q:focus{border-color:var(--fg)}
+#m{font:400 clamp(15px,1.7vw,22px)/1.4 system-ui,sans-serif;color:var(--mute);max-width:min(680px,88vw);text-align:center;margin-top:26px;min-height:1.4em}
+#tabs{display:flex;gap:4px;padding:4px;border:1.5px solid var(--mute);border-radius:999px;background:var(--bg)}
+.t{font:600 14px system-ui,sans-serif;color:var(--mute);background:transparent;border:0;border-radius:999px;padding:6px 22px;cursor:pointer}
+.t.on{background:var(--fg);color:var(--bg)}
 #res{position:absolute;left:0;right:0;top:calc(100% + 6px);max-height:60vh;overflow-y:auto;background:var(--bg);border:1px solid var(--mute);border-radius:16px;box-shadow:0 8px 28px rgba(0,0,0,.2);padding:6px;text-align:left}
 .it{padding:10px 12px;font:17px Georgia,serif;border-radius:8px;cursor:pointer;display:flex;gap:12px;color:var(--fg)}
 .it span{color:var(--mute);font:13px system-ui,sans-serif;min-width:36px;padding-top:3px}
@@ -28,8 +32,9 @@ body{background:var(--bg);color:var(--fg);font-family:Georgia,"Times New Roman",
 </style>
 </head>
 <body>
-<div id="top" onclick="event.stopPropagation()"><div id="sb"><input id="q" type="text" placeholder="Search words and phrases…" autocomplete="off" spellcheck="false"><div id="res" hidden></div></div><div id="c"></div></div>
+<div id="top" onclick="event.stopPropagation()"><div id="tabs"><button class="t on" id="tw" onclick="setMode('words')">Words</button><button class="t" id="tq" onclick="setMode('quotes')">Quotes</button><button class="t" id="tt" onclick="setMode('tp')">TP</button></div><div id="sb"><input id="q" type="text" placeholder="Search words and phrases…" autocomplete="off" spellcheck="false"><div id="res" hidden></div></div><div id="c"></div></div>
 <div id="w"></div>
+<div id="m"></div>
 <div id="h"><div id="r"><button class="b" onclick="event.stopPropagation();skip(-50)">« 50</button><button class="b" onclick="event.stopPropagation();skip(50)">50 »</button></div><div>Space / → / tap: next &nbsp;·&nbsp; ← / Shift+Space: back &nbsp;·&nbsp; ↓ / PgDn: +50 &nbsp;·&nbsp; ↑ / PgUp: −50 &nbsp;·&nbsp; S: shuffle &nbsp;·&nbsp; / : search</div></div>
 <script>
 const RAW = `Framework
@@ -154,7 +159,7 @@ hatchet job
 meeting of minds needed
 avoid like plague
 CAN - conditions, action, needs
-NEWS - north, east west south - boss, direct report,s takelhoders , customer
+NEWS – North (Boss), East (Customer), West (Peers), South (Direct Reports)
 quantum experience
 parlay
 dell's end to end portfolio
@@ -546,27 +551,1030 @@ Jab tak karela nahi dikhaunga, tab tak bhindi kaise khayenge
 Dil me jigar, competitors pe nazar
 Gps theory - recalculate without being judgemental
 Maslow's hierarchy
-Nautical`;
+Nautical
+Diplomacy
+Strategy
+Contextual
+diminishing returns
+Developers sometimes need to be saved from themselves
+CI and CD stand for continuous integration and continuous delivery/continuous deployment.
+GitLab is an open source code repository and collaborative software development platform for large DevOps and DevSecOps projects. GitLab is free for individuals. GitLab offers a location for online code storage and capabilities for issue tracking and CI/CD
+The most significant difference between the two is that while GitHub is a collaboration platform that helps review and manage codes remotely, GitLab is majorly focused on DevOps and CI/CD
+GitHub allows you to create access rights to your code which means, for example, you could designate certain users who are allowed to freely push code to your repository. GitHub's Forking feature allows a user to create a copy of a repository on their computer for them to work on without affecting the main repository
+Hashicorp vault
+Hashicorp Terraform
+Icarus
+Chasing shadows
+Tale of 2 stories
+Glasstable dashboard
+Code hygine
+Growth board
+Storm warning
+Battle tested`;
 
 // de-duplicate (case-insensitive), keep first occurrence
-const seen = new Set();
+const seen = new Set(["knock down barrier","putting why before what","suberfuge","kafaesque","nvidia is same as shovel sellers during gold rush."]);
 let items = RAW.split("\n").map(s => s.trim()).filter(Boolean).filter(s => {
   const k = s.toLowerCase();
   if (seen.has(k)) return false;
   seen.add(k); return true;
 });
-const original = items.slice();
+const WORDS = items.slice();
+const QRAW = `Lots of overnight tragedies, rarely overnight miracles
+Crisis is when extraordinary people come forward & make a mark for themselves
+Never let a good crisis go to waste
+Genius is a person who can do average/ordinary things when everyone else is losing their mind
+Happiness is the ability to do what you want, when you want, with whom you want, for as long as you want
+Some lessons have to be experienced before they can be understood
+Work is an outcome, not a time and place
+Nothing is ever as good, or as bad as it may seem
+If you want to gather honey, don't kick over the beehive
+Luck & Risk are siblings. They are both reality that every out come in life is guided by a force other than individual effort
+If 2 people always agree; one of them is unnecessary
+You are not a spreadsheet, its ok to make mistakes
+The desire to be liked/lucky in universal
+We all have a unique perspective of the world
+Men of action are favoured by Lady of good luck
+Be curios, not judgmental
+Butterfly struggling to get out of cocoon and if you help it, it dies. The struggle forces blood to rush into its wings and fly.
+Life is a maze, love is a riddle
+If you cannot measure it, you cannot manage it
+The purpose of margin of safety is to render the forecast unnecessary
+You cannot skip steps. You have to take one step after the other.
+Failure isn't opposite of success. It's part of it
+A corporation is like a living organism. It has to continue to shed its skin. Methods, focus, values have to change. #Transformation
+Simplicity is the ultimate sophistication
+Fake it till you make it. Fake it till you become it.
+Don't want to fit a square into a circle
+Diversity is being invited to a party. Inclusion is being asked to dance
+Don't let anybody tell you can't do something.
+I get to do this, not I have to do this.
+If you are going through hell, keep going
+Innovation is something no one else noticed
+Every job is easy, if you are not the one doing it.
+Relish the chance to improve
+What begins in anger, ends in suffering
+Maturity comes with experience, not age
+We are in tough times & we are not immune to this economy. Goal is to fight through this.
+Despair Is failure of imagination
+One of the worst uses of time is to do something very well that need not be done at all.
+You do not wake up and become butterfly. Growth is progress
+Mistakes are proof you are trying
+Every man has 2 lives. 2nd one begins when he realizes he has just one.
+Teamwork makes dreamwork
+Talent without work is nothing
+Arrogance mixed with stupidity
+Inspire to work harder, smarter, to be better
+A watched pot never boils
+What begins in anger, ends in suffering
+What you seek is seeking you
+Poets makes the world slightly more bearable, but its engineering that put man on the moon.
+Put yourself in a position to succeed.
+For every question answered, new one appears.
+Heavy lies the crown
+When in doubt, let kindness and compassion guide you.
+This too shall pass
+It won't be AI that takes your job, it will be someone that is using AI more effectively than you.
+Pleased but not satisfied.
+Talk is cheap
+Regret is worse than failure.
+Wish there was a way to tell you are in the good old times, while you are in them.
+Not my circus, not my monkey
+History doesn't repeat itself, it rhymes
+Grass is always greener on the side fertilized with bullshit.
+To a man with hammer, every problem looks like a nail.
+Run full speed and crash into a wall
+You can never over invest in education
+Old ways won't open new doors
+Knocked down barriers
+Slice and dice data
+Measure twice, cut once
+Walking billboard of inspiration
+Trying to kill a fly with a bazooka
+A goal without a plan is just a wish.
+The king is dead; all hail the king
+Make the weakness of your enemy, your strength art of war
+In God we trust, everyone else bring data
+Be stubborn on vision, flexible on approach
+Everyone has a plan until they are punched in the face
+A knight in clean armour has not seen battle
+You drop some bombs, you get burned too
+We look like our habits
+Goat in elevator theory
+Pain is knowledge rushing in the to fill the void
+Having the best Mcdonalds at top of an active volcano
+Thoda gam hai sabka kissa. Thodi dhup hai sabka hissa
+You can never over invest in education
+Run full speed and crash into a wall
+Discipline, consistency and persistence
+Strain on lighthouse, shame, outlook of life
+Our most powerful guiding principles come from our deepest wounds
+Growth comes at a point of resistance
+Slumdog millionaire answering 12 questions based in his life experiences which meant nothing at the time
+People only root for people who don’t need it
+Analysis +capital +execution = success
+FUD - Fear uncertainty, doubt
+Blind men and elephants. Each blind man explains differently. One explains wall, one tree, one pipe
+Comparison is the thief of joy
+Good leaders know when to obey the rules. Great leaders know when to break those rules.
+I think about decisions in three ways: hats, haircuts, and tattoos. Easy, harder, impossible to fix respectively
+Chinese tea cups don’t have handles. If it’s too hot to drink, wait. Same applies to life.
+Don’t allow the weight of your past mistakes determine your limitless future.
+I would rather die with memories than fantasies.
+Your future is shaped by the habits you repeat, not the goals you set.
+Be best friend with a couple where the man is an absolute bafoon. He will make you look great no matter what. Best marriage advise, manipulative, but that’s how world works.
+If you don’t fit into the crowd, it means your place is on the stage.
+You can’t find your life’s purpose until you stop serving everyone else’s.
+If you are the breadwinner in the family, try to eat that bread too, you are not a slave.
+You cannot cry about having a lot on your plate when your goal was to eat.
+Addiction is proof that you are capable of intense devotion. You just have a false god
+a man who waits for the perfect shot will die with a full mag
+The dumbest and easiest management trick in the book is to just be super positive and encouraging all the time. It really does help, it requires 0 brain cells, and so few people do it that it really stands out.
+Asking is a moment’s shame; not asking is a lifetime’s shame
+Unity is power. However, 100 sheep cannot kill a lion.
+Every version of you was necessary, even the ones you are ashamed of.
+The day a blind man sees. The first thing he throws away is the stick that has helped him all his life
+A leaky roof can fool the sunshine, but not the rain
+Don’t allow the weight of your past mistakes determine your limitless future.
+Your future is shaped by the habits you repeat, not the goals you set.
+If you ask the grass, the zebra is the monster, and the lion is the protector.
+When the student is ready, the teacher appears
+Philosophy of life - There are 3 primary colours, 6 notes if music, 9 human emotions (sadness, surprise, anger, anticipation, disgust, joy, trust, fear)
+Become difficult to rush. The world will pressure you to rush into everything. Rushed decisions. Rushed conversations. Rushed relationships. Rushed timelines. There's immense power in rejecting that trend. Slow down. Create space to think clearly.
+3 plays of Shakespeare - Hamlet, Othelo, Macbeth. Hamlet is revenge tragedy. Othelo is a story of jealousy and manipulation. Macbeth is about uncontrolled ambitions.
+The electric light did not come from the continuous improvement of candles
+exulansis,” defined as the tendency to stop discussing an experience, emotion, or aspect of yourself once you realize others cannot fully understand it.
+You can’t control the wind, but you can adjust your sails. It’s not about what happened to you, it’s about how you react.`;
+const _qs = new Set();
+const QUOTES = QRAW.split("\n").map(s => s.trim()).filter(Boolean).filter(s => { const k = s.toLowerCase(); if (_qs.has(k)) return false; _qs.add(k); return true; });
+const MEANRAW = `Framework|A structured set of ideas or rules that guides how work is organised
+Pivotal role|A role that is critical to the success or outcome of something
+Black swan event|A rare, unpredictable event with massive impact, explained only in hindsight
+grounded|Realistic, sensible and based on facts
+essential|Absolutely necessary; indispensable
+pugnacious|Eager to argue or fight; combative
+dogmatic|Insisting that your own opinions are undeniably true
+manifest|Clear and obvious; or to bring something into reality
+don't self edit|Share ideas freely without filtering them as they come
+vote of confidence|An expression of trust and support in someone or something
+drive things forward|Take initiative to keep progress moving
+tech perspective|Looking at an issue from a technology point of view
+bull in a china shop|A clumsy person who causes damage in delicate situations
+snowball effect|A small action that keeps growing bigger as it progresses
+ear to the ground|Staying alert to news, rumours and early signals
+comradry|(Comradery) Friendship and trust among colleagues
+workloads|The amount of work assigned to a person, team or system
+Irish sweepstakes|A lottery-style gamble where winning depends on pure luck
+new broom sweeps clean|A new leader tends to make sweeping changes
+prolific|Producing a large amount of work or output
+workstreams|Separate parallel tracks of work within a project
+straw man|A weak argument created only to be knocked down
+fort knox security|Extremely strong, near-impenetrable security
+product rationalisation|Trimming a product range to remove overlapping or low-value items
+software defined layers|Infrastructure functions controlled by software rather than fixed hardware
+David and Goliath|A small underdog facing a far bigger opponent
+finger int he air|A rough guess or estimate without hard data
+extrapolate|Estimate future values by extending known trends
+complacency|Smug satisfaction that stops you improving or noticing risks
+perseverance+Talent = Luck|Persistent effort plus skill creates what looks like good fortune
+Bane of my existence|Something that constantly causes trouble or annoyance
+yin and yang|Opposite forces that complement and balance each other
+optimize|Make something as effective or efficient as possible
+workflow|The sequence of steps through which work moves
+Kfasque|(Kafkaesque) Bewildering, nightmarishly bureaucratic and illogical
+copacetic|Completely satisfactory; all fine
+stopgap|A temporary fix until a lasting solution arrives
+integrity|Honesty and strong moral principles; being consistent and whole
+innovation|Introducing new ideas, methods or products
+optimism|Hopeful expectation of good outcomes
+ipso facto|By that very fact; as a direct result
+drive|Strong inner motivation; or to push work forward
+judgement|The ability to make sound decisions and sensible conclusions
+undertow|A hidden underlying force pulling against the visible movement
+stragegy circadian rhythm|A regular, repeating cycle of strategy reviews and planning
+whilrwind|(Whirlwind) A fast, chaotic and intense rush of activity
+benovolance|(Benevolence) Kindness and goodwill toward others
+time and persistence|Results come from steady effort over a long period
+growing pains|Difficulties faced while a person or business is developing
+rite of passage|An event marking an important transition in life or career
+thought leadership|Being recognised as an expert whose ideas shape an industry
+tailored boundaries|Limits customised to fit a specific person or situation
+paradigm shift|A fundamental change in how something is understood or done
+prima-dona|A temperamental person who expects special treatment
+lofty goal|A highly ambitious, high-reaching target
+carve out|Set aside a portion of time, money or space for a purpose
+gravy train|An easy source of money with little effort
+flintstone tools|Outdated, primitive tools or methods
+stoic|Enduring hardship calmly without complaint
+leaky bucket|A system that loses customers or value as fast as it gains them
+canary in the coalmine|An early warning sign of coming danger
+crawl, walk, run|Build capability in stages: start simple, then speed up
+long pole in the tent|The task that takes longest and sets the project timeline
+critical decision point|A moment where a choice strongly shapes the outcome
+acceleration points and lever|Places where focused effort speeds up progress
+proverbial next level|The figurative step up to a higher standard
+excelsior|Ever upward; striving to go higher
+ebb and flow|Natural rise and fall; coming and going
+tangible|Real, concrete and measurable
+in profile|Seen from the side; or described in outline
+endorphins/dopamine|Brain chemicals linked to pleasure, reward and pain relief
+serotonin|Brain chemical that helps regulate mood and well-being
+phenomenal|Extraordinary; remarkably good
+slippery slope|A small step that leads to bigger, worse consequences
+preaching to the choir|Convincing people who already agree with you
+life work balance|Giving fair time and energy to both life and work
+cut the mustard|Meet the required standard; be good enough
+analysis paralysis|Overthinking so much that no decision gets made
+pura vida|Costa Rican phrase meaning "pure life": relax, all is good
+conviction|A firmly held belief; strong certainty
+weather the storm|Survive a difficult period without major harm
+fly on the wall|An unseen observer who watches a situation unnoticed
+earmarked|Set aside for a specific purpose
+run forward to stay in one place|Working hard just to avoid falling behind (Red Queen effect)
+fundamental|Basic and essential; forming the foundation
+foundational insights|Core understandings that everything else builds on
+economies of scale|Cost per unit falls as production volume grows
+Nither|(Neither) Not one nor the other
+tailwind|A favourable force that helps progress
+sense of purpose & mission|Knowing why you do the work and what you aim to achieve
+smokes and mirrors|Deceptive tactics that create a false impression
+nature of the beast|The inherent, unchangeable character of something
+crystal ball|An imagined tool for predicting the future
+observability|Understanding a system's state from its outputs: logs, metrics, traces
+fallacy|A mistaken belief based on faulty reasoning
+12 labours of Hercules|A series of extremely difficult tasks
+savant|A person with deep specialist knowledge or exceptional talent
+synergies|Combined effect that is greater than the sum of the parts
+optimised|Made as effective or efficient as possible
+yardstick|A standard used for comparison or measurement
+modernisation|Updating old systems or methods to current standards
+reliability|Consistently performing as expected
+artefacts|Items produced during work: documents, code, designs
+deployment|Releasing software or changes into live use
+peripheral vision|Awareness of things at the edges, beyond your direct focus
+usability|How easy and pleasant something is to use
+living document|A document that is regularly updated as things change
+belabour the point|Over-explain something that is already understood
+retrospect|Looking back at past events to learn from them
+figuring out where is floor and ceiling|Finding the minimum and maximum limits of what is possible
+knock down barriers|Remove obstacles that block progress
+security is a shared responsibility|Everyone, not just the security team, must protect assets
+openness, rationality, honesty|Core values for clear, trustworthy discussion
+hamster wheel never stops spinning|Endless busy activity with no real progress
+hatchet job|A harsh, unfair attack on someone or something
+meeting of minds needed|Parties must reach a shared understanding
+avoid like plague|Stay away from completely
+CAN - conditions, action, needs|A way to frame a problem: Conditions, Action, Needs
+NEWS – North (Boss), East (Customer), West (Peers), South (Direct Reports)|Stakeholder compass: North = boss, East = customer, West = peers, South = direct reports
+quantum experience|A dramatic, breakthrough leap in the quality of an experience
+parlay|Turn an initial success or asset into something greater
+dell's end to end portfolio|Dell's complete range of products and services, edge to cloud
+vertical slicing|Delivering thin end-to-end slices of working functionality
+aop - annual operating budget|Annual Operating Plan: the yearly plan and budget
+sundry|Various items of different kinds
+macro economics|Study of economy-wide factors such as inflation and growth
+progression|Gradual advancement from one stage to the next
+sunk cost|Money or effort already spent that cannot be recovered
+landlocked|Surrounded by land with no sea access; or restricted
+your cross to bear|A burden or hardship you must endure
+go-do|Action-oriented: go and do the task
+elements|The basic parts or components of something
+aligned|In agreement or arranged in the same direction
+flawless|Perfect; without any defect
+complacent|Self-satisfied and unaware of possible dangers
+visibility|How well something can be seen or tracked
+timeframes|Defined periods of time for completing work
+causality|The relationship between cause and effect
+Low hanging fruit|Easy wins that take little effort
+Shuffle the deck chairs on Titanic|Make pointless changes while a bigger disaster looms
+Firefighting activities|Urgent reactive work, solving problems as they flare up
+Utopia|An imagined perfect place or society
+Spectrum|A range between two extremes
+Reading the tealeaves|Trying to predict the future from vague signs
+White - label|A product made by one company and sold under another's brand
+PIE - performance, image, exposure|Career framework: your results, how you are seen, who knows you
+Resilience|Ability to recover quickly from setbacks
+Sustainable|Able to continue long term without exhausting resources
+Circle of trust|A small group where sensitive things can be shared safely
+When rubber meets the road|The moment a plan is tested in real conditions
+Turing test|A test of whether a machine's replies can pass as human
+Finding the rhythm|Settling into an effective, steady working pace
+Non disruptive way|Making changes without interrupting normal operations
+Wet cement|Something still changeable that will soon harden into permanence
+Osmosis|Absorbing knowledge or ideas gradually without deliberate effort
+Devops vs devesecops|DevOps joins development and operations; DevSecOps builds security in
+Icarus tale of 2 cities|Icarus: overreach and downfall. A Tale of Two Cities: best and worst of times
+Cliff note versions|Short, simplified summaries
+Carte blanche|Complete freedom to act as you wish
+Hemm and haw|Hesitate and avoid giving a clear answer
+Table stakes|The minimum requirements needed to compete
+agnostic|Not tied to one particular technology or belief
+Pipeline|A series of stages work flows through, such as a sales or build pipeline
+Skunkworks|A small, autonomous team doing experimental, often secretive innovation
+Release roadmap|A plan showing what will be delivered and when
+Enrich bottomline|Increase profit
+Pile-on-effect|Many people adding to criticism or pressure once it starts
+Strategically|With a long-term plan or goal in mind
+Industry leaders|The top, most influential companies or people in a sector
+Catalyst|Something that triggers or speeds up change
+Hit the ground running|Start a new role or task effectively right away
+Cautiously optimistic|Hopeful, but aware of possible risks
+Drain the slides|Strip presentation slides down to the essentials
+Fail fast and pivot|Test quickly, accept failures early and change direction
+Take bull by the horn|Confront a difficulty directly and boldly
+Eureka|An exclamation of sudden discovery
+Evangelist|An enthusiastic advocate who promotes an idea or product
+Edmund hillary -everest|With Tenzing Norgay, first to summit Everest (1953); symbol of daring
+STAR - Situation, task, action, results|Method for structuring interview answers and stories
+Lost in the ether|Disappeared or forgotten; never reached its destination
+Humble pie|"Eat humble pie": admit a mistake humbly
+Bottomless bucket of cash|An unlimited supply of money (never true)
+Fork in the road|A point where an important choice must be made
+Elevator pitch|A very short persuasive summary, about 30 seconds
+Multimodal|Using several forms of input or output: text, image, audio
+Motley crew|A varied group of mixed people
+Ragtag|Untidy, disorganised, made of mismatched parts
+Stretch goal|An ambitious target set beyond what is easily achievable
+Modality of data|The form or type of data: text, image, audio
+Wireframe|A simple skeleton layout of a page or screen
+Stowaway|Someone hidden aboard who travels without permission
+Air gap|Physical isolation of a system from any network
+Lagging and lead measure|Lagging measures show results; lead measures predict them
+Tooth comb|Examine in minute detail (fine-tooth comb)
+5 why|Root-cause technique: ask "why" five times
+Shanghaied|Forced or tricked into doing something
+Delta|The difference or change between two states
+Railroad|Force something through quickly, ignoring objections
+Toilwork|Repetitive manual work that adds little lasting value
+Allowed tail to wag the dog|Let a minor part control the whole
+Standard modality|The usual, accepted way of doing things
+Lockstep|Moving in rigid, perfect synchronisation
+Multifaceted|Having many sides or aspects
+Hypercare|Intensive support right after a launch or go-live
+Radical simplification|Cutting complexity drastically to the bare essentials
+Lethargy of decision making|Slow, sluggish decisions
+Siloes|Teams or systems that do not share information
+Growth mindset|Belief that abilities improve with effort and learning
+Trail blazers|Pioneers who lead the way
+Throw in the towel|Give up
+RPE - resume producing event|An achievement worth adding to your resume
+Storming forming|Early stages of team development: forming, storming, norming, performing
+Non functional requirements|Quality needs such as security, speed and reliability, not features
+Knee-jerk reaction|An instant, unthinking response
+figleaf|Something used to cover up or hide an embarrassing fact
+Leap of faith|Taking a risk on trust without proof
+Ducks in the row|Having everything organised and ready ("ducks in a row")
+Putting why before the what|Explain the purpose before describing the task
+Not my circus, not my monkey|Not my problem or responsibility
+Long winded|Using too many words
+Regret is worse than failure|Not trying hurts more than trying and failing
+Talk is cheap|Words mean little without action
+This too shall pass|Hard times (and good times) are temporary
+Chaos theory|Small changes can cause large, unpredictable effects in complex systems
+Show of faith|An action demonstrating trust or commitment
+recee|(Recce) Reconnaissance: scouting ahead before acting
+Stake in the ground|Setting a firm initial position to build from
+Tyranny of choice|Too many options make deciding harder and less satisfying
+Pivot while maintaining core values|Change direction without giving up principles
+Solomon's paradox|We advise others wisely but struggle to judge our own problems
+hedonic treadmill|We return to a baseline happiness despite gains
+Problem of plenty|Trouble caused by having too much
+Bend with the Breeze|Be flexible and adapt to changing conditions
+Prevent sins from our past|Avoid repeating earlier mistakes
+New nut in the trail mix|A newcomer added to a team or group
+Grief is price we play for love|Mourning is the cost of having loved
+Opponent vs enemy sports teaches that|Sport teaches that rivals are not enemies
+Are you a machine gun or sniper?|Spray many efforts, or aim one precise shot?
+Push the button, get the banana|Simple cause and effect: action brings reward
+PICNIC. - problems in Chair, not in computer|User error, not a technical fault
+Jal, janini, jamin - reasons for wars|Water, women, land: classic causes of war (Hindi)
+Zindagi badi honi chahiye lambi nahi|Hindi: life should be big, not just long
+ethos|The distinguishing character and values of a group
+battle tested diplomacy|Diplomacy proven through hard experience
+inerlock|(Interlock) Connect so that parts work together
+adoptions%|Percentage of users who have taken up a product or feature
+pivot|Change strategy or direction
+firefight|Deal with urgent problems reactively
+tactical|Concerned with short-term actions to reach a goal
+delusions of grandeur|A false belief that you are far more important than you are
+checks and balances|Controls that stop any one part holding too much power
+coup de grace|A final blow that ends something
+pushing the envelope|Going beyond current limits
+bought ticket to titanic|Joined something that is clearly doomed
+hanlon razor|Never attribute to malice what stupidity explains
+self regulation|Controlling your own behaviour and emotions
+verbatim/paraphrase|Exact words versus restating in your own words
+hope isn't a strategy|Plan concretely; wishing is not enough
+pie in the sky|An unrealistic hope or plan
+exigencies|Urgent needs or demands of a situation
+playbook|A documented set of standard plays or procedures
+galvanising|Shocking or exciting people into action
+dormant|Inactive for now but able to wake up
+too many cooks spoil the broth|Too many people on a task ruin it
+a camel is a horse designed by a committee|Group design compromises produce clumsy results
+harness the muscle of organisation|Use the full strength of the organisation
+battle cry|A slogan or shout used to rally people
+soup to nuts|From beginning to end; everything
+stability|Steadiness; resistance to sudden change
+component|One part of a larger system
+cascade|Pass down in stages, such as goals from leaders to teams
+realm|A domain or area of activity
+flipside|The opposite or less obvious side
+scale|Grow to handle more volume; or a measuring range
+rinse and repeat|Do the same steps over and over
+rallying the troops|Motivating people to join the effort
+opex, capex|Operating expenses (running costs) versus capital expenses (assets)
+onwards and upwards|Keep progressing to better things
+poke the nest|Provoke trouble that could be avoided
+slice and dice data|Break data into parts to analyse from many angles
+woe is me|A self-pitying complaint
+tip the scales|Change the balance toward one side
+baptism by fire|A harsh first experience of a new job or task
+ducks int he row|Having everything organised
+sing for your supper|Earn your benefit by performing
+skewed views|Biased, distorted opinions
+dust on our glasses|Blurred perception that hides the true picture
+smoking gun|Clear, undeniable evidence
+chasing the while whale|(White whale) An obsessive pursuit of one elusive goal
+red tape|Excessive bureaucracy and paperwork
+that old chestnut|A stale, much-repeated joke or argument
+double down|Strengthen your commitment despite risk
+trading partners seldom wage wars|Economic ties between countries reduce chance of conflict
+devil's bargain|A deal with short-term gain and big long-term cost
+Moor's law - the cost of hardware goes down with time.|Moore's law: computing power roughly doubles every two years as cost falls
+bee in the bonet|(Bee in the bonnet) An obsessive idea
+Swiss army knife of IT teams|A versatile team that handles many kinds of tasks
+comprehensive|Complete; covering everything
+brass tacks|The basic, practical facts
+Geriatric|Relating to old age; here, outdated
+crucible|A severe test; or a place where elements combine
+for good measure|As an extra, to be safe
+global friendly hours|Working hours that suit multiple time zones
+equipped with ools and resources|Given the tools and resources to do the job
+move the dial|Make a significant, measurable difference
+elementary|Basic and simple
+spans and layers|Number of direct reports (span) and management levels (layers)
+detail oriented|Careful about small points
+foundation|The base on which something is built
+voice and tone|How a brand sounds: its personality and attitude
+consexual|(Consensual) Agreed to by everyone involved
+hyper connected world|A world where people and devices are constantly linked
+meticulously|With extreme care and precision
+reminisced|Recalled past events fondly
+drink your own champagne|Use your own product ("eat your own dog food")
+measure twice, cut once|Plan carefully to avoid mistakes
+discipline, consistency and persistence|Habits that lead to long-term results
+resting on our laurels|Relying on past success instead of improving
+muscle of documentation|The habit of writing things down thoroughly
+seeing storm brewing|Noticing trouble developing early
+frog in the throat|Hoarseness; a husky voice
+retrofit|Add new features to an older system
+telemetry|Automatic collection of data from remote systems
+risk profile|The overall level and kind of risk
+resilient|Able to bounce back
+way station|A stopping point along a journey
+cicid|Likely CI/CD: automated build, test and release pipeline
+constrained|Limited by restrictions
+pipe dream|An impossible fantasy
+dancing between the raindrops|Skilfully avoiding trouble
+hail mary|A desperate last-ditch attempt
+bleeding edge of technology|The newest, riskiest edge of technology
+managed services|Ongoing IT work outsourced to a provider
+perfect storm|A rare combination of factors producing a disaster
+3 points don't make a line|Three data points are too few to prove a trend
+topline growth|Growth in revenue (sales)
+context aware|Adapting behaviour to the surrounding situation
+managing a fleet|Looking after many devices or vehicles together
+implementation|Putting a plan or design into action
+deep integration|Tightly connecting systems
+game changing|Altering the way things are done
+privacy|The right to keep information to oneself
+global talent pool|Skilled workers available worldwide
+reinvent the wheel|Waste effort recreating what already exists
+naturally ambitious|Inherently driven
+as real as gravity|Undeniably real
+consistent|Steady and dependable
+throttle|Limit the rate or speed
+Chinese whispers|Messages that get distorted as they are passed along
+robust|Strong; able to withstand stress
+keep throwing mud at the wall, some will stick|Try many things; some will work
+FMEA - failure mode effect analysis|Method for finding how a design can fail and the impact
+thumbnail sketch|A quick, brief outline or description
+minutiae|Very small, precise details
+global service footprint|Worldwide reach of service operations
+hamlet moment|A point of agonising indecision
+snake oil salesman|Someone selling worthless products with false claims
+best laid schemes of mice and men|Even the best plans often go wrong
+barometer of performance|An indicator of how well things are going
+piece de resistance|The standout highlight
+boilerplate|Standard, reusable text or code
+machine learning|Systems that learn patterns from data
+MAP - management, action, plan|Framework: Management, Action, Plan
+Gravitas|Dignity and seriousness
+AI algorithm|Step-by-step rules an AI system follows
+strategic roadmap|A long-term plan of milestones
+latest and greatest|Newest and best
+ecosystem|A connected network of partners, products or users
+horse in the race|A stake or interest in the outcome
+Hedge your bets|Reduce risk by spreading your choices
+Lessons earned, not learned|Wisdom paid for through experience
+Macro picture|The big overall view
+Horse whisperer|Someone with a gentle gift for handling difficult beings
+Hockey stick graph|A curve that stays flat, then shoots up sharply
+Industry standard architecture|A design widely accepted across the industry
+Parley|A discussion to settle a dispute
+Kumbaya effect|Naive, harmonious togetherness
+Checkpoint|A stage where progress is reviewed
+Regression testing|Re-testing to ensure changes have not broken old features
+Litmus test|A decisive test of a single quality
+Dojo model|Hands-on learning space for building skills
+Standardize, simplify, automate|The order for improving a process
+Cart before the horse|Doing things in the wrong order
+Encore|A repeat performance
+Vayocondios|(Vaya con Dios) Spanish: "go with God", a farewell
+Quantify|Express as a number
+Throes|Intense struggle or pain
+System of record|The authoritative source for a type of data
+Kafaesque|(Kafkaesque) Bewildering, nightmarishly bureaucratic
+Deadcatting|Dumping a shocking distraction to divert attention
+Wet blanket|A person who dampens enthusiasm
+Kraken|A mythical giant sea monster
+Aspirational|Reflecting hopes of achieving something higher
+Ideation|Generating new ideas
+Inflection point|A moment when a trend changes significantly
+Sigma|Standard deviation; Six Sigma measures quality
+Manifestation|A visible sign; or making a wish real
+Circular economy|Reuse and recycle instead of use and discard
+Compare and contrast|Examine similarities and differences
+Reductive|Oversimplifying complex matters
+Way markers|Signs showing you are on the right path
+Aspect|One part or feature of something
+Hubris|Excessive pride that leads to downfall
+Eureka moment|A sudden flash of insight
+Trying to kill a fly with a bazooka|Using excessive force for a small problem
+Penny wise , pound foolish|Careful with small sums, careless with big ones
+Walking billboard of inspiration|Someone whose life inspires others
+Heavy lies the crown|Leadership brings heavy burdens
+Parameters|Defined limits or variables
+If Tom kills Jerry, show is over|Without rivals or conflict, the story ends
+Like taxes and death, this is given|Certain and unavoidable
+Sometimes life feels like soup and you're a fork.|Feeling ill-equipped for the challenge
+Recency Bias|Giving too much weight to recent events
+Flywheel|Momentum builds as it spins; effort compounds
+Never touch a running system|If it works, do not change it
+Resonate|Strike a chord; connect with someone
+Maintenance surface area|The amount of code or systems you must maintain
+Casandra prophecy|(Cassandra) Accurate warnings that nobody believes
+Force multiplier|Something that greatly increases effectiveness
+Chivas Regal effect|A higher price makes people see higher quality
+Dichotomy|A division into two opposites
+Emotion pe control hai, car me petrol hai|Hindi: emotions under control, petrol in the car
+Myriad|A countless number
+Splitting hair|Making petty distinctions
+Receptive to business desires|Open to what the business wants
+HA availability on people level|High availability applied to people: backups for key roles
+Drinking from a firehose|Overwhelmed by too much information at once
+Feedback loop|Output returns as input and shapes the next result
+Chink in the armour|A weakness in an otherwise strong defence
+Nature vs nurture|Genes versus environment
+Rank and yank|Ranking staff and removing the lowest performers
+I want onion to taste like peach, so that's ok|Wanting the impossible
+Man in the mirror keeps getting old.|Time passes; look at yourself
+Equilibrium|A state of balance
+Dil me jigar, competitors pe nazar|Hindi: courage in the heart, eyes on competitors
+Maslow's hierarchy|A pyramid of human needs, from basic to self-fulfilment
+SMART - specific, measurable, achievable, relevant, time bound|Goal-setting checklist: Specific, Measurable, Achievable, Relevant, Time-bound
+STP - segmentation, targeting, and Postering|Marketing model: Segmentation, Targeting, Positioning
+Subterfuge|Deceptive trickery used to reach a goal
+Pain is knowledge rushing in to fill the void at great speed|Painful experiences teach lessons very quickly
+If you are going through hell, keep going|In a hard time, keep moving rather than stopping
+Every job looks easy if you are not the one doing it|You only see the difficulty when you do the work yourself
+Grass is always greener on the side fertilised with bullshit|Others' situations look better, but often hide a mess
+History doesn't repeat itself; it rhymes|Past events do not repeat exactly, but patterns echo
+A watched pot never boils|Time seems slower when you wait impatiently
+What begins in anger, ends in suffering|Acting in anger leads to regret and pain
+Who got rich during gold rush? Men who sold shovels. Nvidia's gpu are shovels and ai is gold rush|In a boom, those supplying the tools profit most reliably
+If you don't pick a day to rest, your body will pick it for you.|Skip rest and you will eventually be forced to stop (illness, burnout)
+Death march from minefield|A project forced forward under extreme, risky conditions
+There are decades when nothing happens and then there are weeks where decades happen|Change can arrive suddenly in concentrated bursts (attributed to Lenin)
+Sell entertainment, convenience, lust, hope|What people most readily pay for
+A healthy mix of greed and ambition|Drive to win balanced with the desire for reward
+Discovery begets more fields of inquiry and it goes on.|Every answer opens new questions
+We didn't put Webb telescope and end there. It begets more.|One breakthrough leads to further discoveries
+Science, knowledge etc.|Fields built on questioning and learning
+We are exceptional at creating exceptions|We keep making rule-breaking special cases
+A goal without a plan is just a wish|Goals need action steps to become real
+To a man with hammer, every problem is a nail|We over-use the tools we know best
+Run full speed and crash into a wall|Rushing ahead blindly ends in failure
+You can never overs invest in education|Learning always pays off
+Ships don't sink because of the water around them. Ships sink because of the water that gets in them|Outside pressure matters less than what you let inside
+Amidst rough seas, you need a steady sailor|In a crisis, you need a calm, capable leader
+Dune - foundational prophecy for Paul as prophet/God. Jesus, Kalki|Messiah-prophecy theme: a prophesied saviour figure
+Until death all defeat is psychological|You only lose when you give up in your mind
+Don't start it but end it ; pehle chedo mat but for chodo mat|Do not start a fight, but if one starts, finish it
+The generals will fight till the last drop of your blood|Leaders may sacrifice others in their battles
+Don't complain about having too much on your plate if your goal was to eat|Do not complain about a workload you chose
+Enemy vs competitor – importance of sports.|Sport teaches that rivals are competitors, not enemies
+A leaky roof can fool the sunshine, but not the rain|Hidden flaws show up under real stress
+Opposite of love is not hate, it's indifference|Not caring is the real opposite of love
+Jab tak karela nahi dikhaunga, tab tak bhindi kaise khayenge|Hindi: show the bitter option first so the other seems acceptable
+Gps theory - recalculate without being judgemental|Like a GPS, simply re-route after a wrong turn without blame
+The reason 9-5 offices are so cold is because you're surrounded by the ghosts of people's dead hopes and dreams|Dark joke about the soullessness of office life
+"Out of hatred for the cockroach, the ants voted for the insecticide. They all died, including the housefly that didn't vote."|Hate-driven choices can harm everyone, even bystanders
+When you speak in learned language, the mind listens. When you speak in native language, the heart listens|Mother tongue connects emotionally
+Your intuitions will speak to you in statements and your anxiety will speak to you in questions|Calm certainty is intuition; worry shows up as endless questions
+Baader–Meinhof effect. Once you learn something new, you'll suddenly start noticing it everywhere, not because it's appearing more often, but because your brain is paying more attention to it.|Frequency illusion: you notice what you just learned everywhere
+Nautical|Relating to ships and sailing
+Diplomacy|Handling sensitive matters tactfully to keep relationships and agreements intact
+Strategy|A plan of action designed to achieve a long-term goal
+Contextual|Depending on or relating to the surrounding situation
+diminishing returns|Each extra unit of effort yields a smaller gain
+Icarus|In Greek myth, flew too close to the sun: a warning against overreach
+Chasing shadows|Pursuing something illusory or unattainable
+Tale of 2 stories|Two contrasting accounts of the same situation (cf. A Tale of Two Cities)
+Glasstable dashboard|A live, single-view dashboard showing overall status at a glance
+Code hygine|(Code hygiene) Good coding practices that keep code clean, secure and maintainable
+Growth board|A tracker for progress on learning and development goals
+Storm warning|An early alert that trouble is approaching
+Battle tested|Proven reliable through real-world use
+Hashicorp vault|Securely stores and controls access to tokens, passwords, certificates, API keys and other secrets
+Hashicorp Terraform|Infrastructure-as-code tool for defining and provisioning cloud infrastructure`;
+const MEAN = {};
+MEANRAW.split("\n").forEach(l => { const k = l.indexOf("|"); if (k > 0) MEAN[l.slice(0, k).trim().toLowerCase()] = l.slice(k + 1).trim(); });
+let mode = "words";
+const TPRAW = `Doga, Nagraj, Dhruv .. A dog.
+Indonesia - Luwak coffee, Mount bromo active volcano,
+Street Hawk pulsar
+Cocaine barfi
+Solving every joke! Not a fucking math problem
+superman was a naughty child, underwear above pants
+Do u think there is banta Monica line Santa Monica
+Is riding horse a 2 wheeler or 4wheeler
+Flight, oxygen mask –all land! Floatation device, inflation straw, single breath. Inflating baloon. Whistle, predators, malaysia plane
+Cbz
+New mahindra logo
+School kabristan
+Maut ka kuan
+Airport train, drunk idea
+Thailand 2015- Kenkada lapdance
+there was space for 2 people with jack and rose
+Amsterdam -peep show
+USA car, rhd, auto, hooters, Emc Dell usa, merger day, subway metro ny, Weed, Chevy Cruz, NY Hotdogs, Amtrak old trains, honor system parking, boston walking tour – cheers, NY Times square,
+Varkala – cliff resort. Swordfish, weed, houseboat, drove ferry,
+Ireland –arab, drunk, cold chill, Guiness beer, Weed, Cliffs of Moher – end of land, castles, Powers whisky, Jamesons, Titanic (last stop before it was sunk) - Cobh, Kiss the Blarney stone,
+Malaysia – Snake story, non veg.
+Cambodia- visa bribe, snake tequila, khmer rouge, Monk painting, airport sleeping pods
+Mix 100 times story
+Covid handwash, kurkure, pleasure self
+Whose line is it anyway
+Pakistan job interview
+What if dejavu is like multiple lives in a game and dejavu is you going back to last checkpoint
+Mahadevpura neighbor story
+Ukraine didn't ban Rus apps? I thought that's what you ban Chinese apps? I thought that's what you do when a country invades your land.
+Suitcases didn't have wheels – how did we live?
+Zoom, the teleconferencing app, has done more to reduce emissions than electric vehicles.
+Starting a true crime podcast but I don't have time to research so I'm just committing the crimes myself.
+Still blows my mind that the tongue rests on the upper palate and not the lower one.
+Should banks be on top floor? Less robbery
+Indians are brutal, no voicemail, rings and leaves it there. Bas kuch nai. Over.
+Glad didn't grow up in internet age
+Happy place, Goa
+Yoda toy car story
+Landline Phones didn't need electricity
+Cringe moment, clapping when an overseas client showed up at work. 5 full minutes
+Tax on Property tax. Tax on tax.
+They keep watering fish while selling, they know it's dead right?
+Holding umbrella and getting work done feels like Ramadhir
+Budhists are the most brutal, sri lanka, myanmar, china
+River resort mysore, cauveri, ran away. Palace stay.
+Kundapur river,real life timelapse like speed
+Why does Goofy talk and walk but Pluto does not?!
+Gym like saw5
+Car Tow story
+First time Modi is solving w problem he didn't create with Covid.
+Bmw flying car – prototype
+Corner House DBC
+Wild ideas, health& Glow.
+Called people 30 old at 18
+Michelin – tyre, restraunt rating.
+Ipo's
+Gappu dream. There, toy. Crying.
+Taken – Leam Nielson is a horrible father!
+Charles Sobhraj, serpent
+Prisoners of geography. Mountains, Russia, Ukrain, India, Pak
+Money- billion dollars but stuck on an island. Money is transactional and information
+We don't belong to this planet, cold, hot, need car, bacon wrapped burgers,
+Bachpan burger, tikki instead of patty, cabbage instead of lettuce,
+People press down button on elevator as they wanna go down. Not very bright!
+UPI killed the chewing gum industry.
+Electric scooters fixed reverse problem. Simple but required
+Indians spend there entire lives with no knowledge of any allergy
+Steve Jobs was undeniably a genius. But Tim Cook took Apple from $153B to $3T over the last 11 years. (20x increase)
+The person who discovered milk. What was he doing to the cow? How many animas were molested?
+Sehwag Sachin world cup 2003,2007
+What's with Russia and Nuclear plants
+Scarface and the scenes picked from it... sanjay dutt with giving money to mother, Company – ajay devgun and Vivek oberoi with kid.
+All neighbouring countries in disarray. Sri Lanka(financial), Myanmar, Pakistan (floods, financial)
+Nasa going back to moon.
+Bezos, branson space flight
+In 2000s you wouldn't tale out your headphone cable, now you yank it out as it auto stops, we get used to tech so easily
+China supply chain issues – biggest electronic market shut over.
+Covid accelerated digital transformation
+Whatsapp payment failed in India – we need speciality in everything. Jiomart whatsapp order may fail too.
+IPL telecast will have multiple streams, viewers can choose personalised camera angle to watch game
+Adani NDTV, 2nd richest.
+Usual suspects meets reservior dogs – Kaante.
+Allen solly – Fred Perry. Same icon.
+Rajnath will be renamed to KartavyaNath as well
+Ate tacos for weeks after watching lalo salamanca taco video
+Vistara air, in flight entertainment on phone
+What's happening to Britain? The country is is failing, pm's going for a toss
+TeslaBot , Sophia the robot
+Reyansh Diwali, Santa
+Have we now colonised Britain?
+Banana is a forbidden fruit, its name has Naa Naa
+Banta claus, santa's evil twin who will take away your existing presents.
+Where are Masha's parents?
+When I die, I am probably going to ask abt wifi and Netflix
+Pablo escobar gaviria
+Friends theme song slowed down
+2nd half of parachute
+Peg- precious evening glass
+Who do these Bangalore cab drivers talk to? Why are they always on call?
+Zyada cool mat bano, tum sab bhi bachpan me eye-spy ko ice-pice bolte the
+ultron rlly spent 10 seconds on the internet and said "yeah they all have to die
+Difficult for kids in 2050 trying to study the 2019-2022 chapter of history for a test
+A punjabi crypto currency called .ethe
+We don't do Netflix and chill. We do Dolo and solo.
+Shazam for perfumes
+Decathlon is the adult version of a stationery shop
+Star wars first came with hybrid meeting concept.
+Welp, this was Catch2022.
+Real reason why Parag was fired was because he wanted to name Twitter – Agarwal Tweets.
+Indian parents call their kids beta because they haven't released them.
+The flag of Japan was designed by a Kanpur guy.
+30s start at 34 and 40s start at 38.
+pls teach maps to say "not this one, the next one" - Punjabi woman GPS. Bebe Maps. Profanity.
+Facebook India to be renamed to Mehta
+Bhaisaab aapke gale ka Caps Lock on reh gaya
+"Business school" sounds so made up. It's what a kindergartner would say if you asked them where dads go all day
+the olden days the internet used to scream when you turned it on
+What if UFOs are just billionaires from other planets?
+My cardio is called, "looking for my children's shoes."
+Video games are so popular because unlike real life, you're given the tools to succeed and pointed in the right direction.
+Does every Indian fridge have a half-cut lemon in the door compartment?
+I occasionally wonder whether the entire Universe is nothing more than a snow-globe on the living room mantle of an Alien.
+People who think Bill Gates can put a microchip in their arm surely haven't tried Microsoft Teams, right?
+I hope they don't have alexa integration on Nuclear bomb launches. Alexa order Lunch – oops Launched.
+Before you decide to have kids, you should know that they need to be entertained 27 hours a day. My math is correct, just ask any parent.
+Fuck acronymns. Itni mushkil se english seekhi hai, main toh pura bolunga.
+Dua lipa's aunt is Bua lipa
+A waffle is pancake wearing cargo pants.
+If no one comes from the future to stop you, then how bad of a decision can it really be?
+The first people to make Goa plans were the Portuguese.
+Whiskey vs whisky
+Paw Patrol plot holes: How do they afford all that equipment? -Why is Ryder, a child, in charge? -Who gave those pups licenses? -Who trained those pups... I have yet to see any cops or firefighters around? -How do they get the authority in other places like Adventure City?
+Cocomelon - Why don't any of the children look like the father? Why do all three look wildly different?
+Vistara is merging with Air India. That's like Netflix merging with Doordarshan.
+Imagine covid episode on friends, TBBT and Seinfeld
+Calm down video, start of hardcore porn
+Forgets password, resets password, password cannot be same as last 3 passwords.
+If you could enter the world of one movie, and live alongside the characters, which movie would it be? Succession...
+Succession – the underline starts at bottom and cross starts from middle. Logan was underlining.
+Burnt hand story
+Whatsapp Delete message, delete for me...why would i delete for me and now lose the ability to delete for others?
+Rambo circus
+WC football final cambodia
+Parikrama restraunt Delhi
+ChatGPT
+Early reviews of Avatar 2 are in. Viewers are disappointed with the graphics of real world.
+FTX , sam bankman fried, arrest, quickbooks, accounts, parent company, transfer funds
+China covid cases
+Iphone europe type-c
+Wheels, bicycles were technology at one point. Perception changes
+Creta,Merc, Jeep, Skoda test drive
+Samsung flip, communicator
+Komal driving test
+Treadmill story, woman horrified, thought was a friend
+Mutual funds – direct vs regular. Index funds. Direct – Hera pheri example. Bipasha basu – investing in overseas company. Baburao asks why not invest directly in the overseas company and cut out the middleman? That's direct fund.
+boston dynamics parent company – Hyundai Motors
+Hydrogen fuel vs electric
+Abducted by aliens, would you be part of their zoo or circus?
+Cars are named after horses because horses replaced cars, horsepower etc
+People didn't feel comfortable with automatic elevators, adding the soothing female voice helped , floor 1 etc.
+Imagine dragons is this generations linkin park
+Imagine dragons bones, tera music madarchod
+Passion to return myntra items
+Australia is world's Delhi, Ireland is world's punjab.
+Bruno contended about eating snack from diaper bag. They don't pre shit the diapers.
+Similarity between Harry potter world and Star Wars
+"This message is deleted" is too much drama. Why can't it delete without notification?
+caoimhe pronunciation – Kweeva
+Its almost brutal that Feb has 28 days and March has 31 days. It's too much on the spectrum.
+Baking soda is so useful, I am pretty sure cut for cancer is like 2spoons banking soda and 1gm of cocaine
+P is so dumb that she throws blue toilet cleaning rock directly in the bowl. She is so dumb that she and her husband have a whatsapp group for just the 2 of them.
+Cave with its own weather system
+Thinking of getting elephant ear tattoo on my thighs
+Pizza hut garlic bread
+Tetris – Tetra, tennis.
+Women timed equality perfectly. Ac everywhere , no hunting
+What's your Michael Scott moment? Mine is smooch cake shop India's of smoor in front of lots of women.
+DJ india visit story. Burma burma
+Uber has no cars, airbnb has no property. Filthy rich on idea and software
+Michael G Scott is named like that because of G-Spot but misslpelled like Michael Scott would.
+Laung lachi song
+AG the OG
+Wwe
+Paste without formatting should be default
+The funniest scene in any Christopher Nolan film is from "The Dark Knight": Harvey Dent doesn't realize that his nurse is The Joker until he takes the surgical mask off.
+How useless are LinkedIn's 42 people viewed your profile?
+Wipro is known for its 3.5 L annual salary since 100 B.C.
+I've always suspected that an advanced alien civilisation with the technology to travel at close to light speed across interstellar distances would arrive in Earth orbit unobserved and proceed to dispatch a fleet of small, easily detectable balloons into our atmosphere.
+I find it hard to take productivity advice from someone who doesn't have kids.
+If you think MS will develop a AI tech/inject with vaccines hasn't obviously ever used MS Teams. If they can't do something that simple – how can they takeover the world?
+We are all a row in someone else's Excel.
+Who called it Bangalore and not Jamnagar?
+Meanwhile Indian uncles in park: "Yeh Zuckerberg aur Hidenburg same caste se hai ?"
+Do they call it gross pay because it's disgusting to see how much you could've made before they took it all in taxes?
+After the titanic sank everyone knew how it could be saved.
+If I told you are a robot, would you be able to handle it?
+AnkMahal, Komahal
+Aliens will be some other planets asshole billionaires
+Airport security and open season during baggage pickup
+Watched wwe on sony. Yokuzuna was considered fat. Now its a regular uncle at star market.
+Need 8 foot Tardis outside the door.
+Gaia is earth, when we fall sick our body increases temperature. Earth is doing the same.
+Clark kent is superman's alter ego. He is the only one who in reality is the superhero and wears a costume to hide his true identity. Others bagman wear costumes to become superhero
+Taco with roti and sabzi.
+I don't trust a chef with 6 pack
+Definition of hell is you being stuck in traffic, moving at 2kmph. You cannot stop, you cannot go anywhere.
+Chicken in blanket Shwarma
+New gen is Gen baby shark
+Alicia silverstone first crush
+Stevie the TV
+Rosita the chair, Ro is is bum
+Reason you look different in picture vs mirror is because mirror is how you see yourself and picture is how the world sees you.
+Archduke Franz Ferd was killed by Gavrilo Principo
+Memories show you in 3rd person pov
+The generals will fight till the last drop of YOUR blood
+If Tom kills Jerry, the show ends.
+Enemy vs competitor – importance of sports.
+"Out of hatred for the cockroach, the ants voted for the insecticide. They all died, including the housefly that didn't vote."
+Great idea to have chips with transparent packaging
+Haunted house story
+Apple needs to bring back ipod.
+Srk came in a helicopter and mom made all india believe she sensed. It was a fucking helicopter
+Everyone wants cellphone signal, no one wants cellphone tower
+MRi dhoti
+It's easy to understand women, just imagine what colour number 7 smells like
+North indian and South Indian names spelling.. They add h to some names like Aditi- Adithi. Shweta - Shwetha. But drop h in some cases Shankar Sankar Shridevi, Sridevi
+Fulcram goodies, 6500 cutoms
+only realised why Ray-Bans are called ray bans.
+4L worth of carpets by colleagues from Ireland and US.
+If I have a cat, i will name it schodinger
+Odyssey and Ramayana were written in same timeframe. Both long journey, monster, being stuck.
+Will future be Star Wars or star trek? Mad max shitshow vs abundance
+Speech depends on weather. Africa is hot, they speak with more mouth open. Norvegian countries cannot afford to do that, they speak with almost mouth closed
+Kailasa temple, carved from stone
+For billionaires more money is a scorecard. Dick measuring contest
+Do you ever think of Mitochondria? AI may not think about you.
+26/11 was very well coordinated- let elites know via oberoi and taj. Let general oublic know via vt station, let irani know with leopold café, let jews know with fishing village about their presence and send a message
+Carl jung shadow self - part of your psych you don't want to reveal to yet world - hyper competitive, jealous
+Nietzsche's "He who fights with monsters should look to it that he himself does not become a monster. And if you gaze long into an abyss, the abyss also gazes into you
+Figured out women: what colour letter 7 smells like
+Luwak Coffee - Indonesia. Mount bromo - Brahma in their version.
+Ghost story - Mahadevpura house.
+Eloping
+CBZ bike.
+School in kabristan
+Maut ka kuan's
+Thailand , kenkada lapdance. Ate scorpio, lapdance on sis-in-law's birthday.
+US trip, car rhd. Hooters. Merger EMC. Subway metro, NY, Boston difference. Cheers trip. Chevy Cruz, NY Hotdogs, Times square, Amtrak old train, honor system parking, weed (Paul - getting panicked post weed), automatic for the first time.
+Amsterdam- peep show
+Varkala - cliff resort, roadtrip, Kanyakumari, weed, houseboat, drove ferry, swordfish.
+Ireland - arab drunk, cold chill, Guiness beer, weed, cliffs of Moher - end of land, castles, power swhisky, jameson, Titanc Cobh (last stop before it was sunk) kissed the blarney stone.
+Malaysia - Snake story, non veg (guys in Penang went crazy and fed me everything)
+Cambodia - visa bribe, snake tequila, khmer rouge, Monk painting, airport sleeping pods. World cup final.
+Covid - all work being done on own, garbage boxes wash
+Pakistani guy in Dell asking for job and fielding the questions on where he is from.
+Goa - happy place.
+Yoda toy car story.
+Cringe moment of overseas client visiting and HR randomly started to clap. The office like story.
+Car Tow story, I had the key.
+Corner House, DBC, poonam shashank story.
+Wild ideas - Health and glow. Kept telling the lady do you have wild ideas?
+Smoor/Smooch story.
+River reseort Mysore, Cauveri river ran away. Palace stay.
+Kundapur river, real life timeliapse.
+OG burger in childhood. Cabbage instead of leattuce. Hawker on street.
+Sehwag Sachin, 2003, 2007 world cup.
+Pablo Escaobar Gaviria
+Gavrilo PrinciP killed Archduke Franz and started ww1.
+Parikrama restraunt Delhi.
+Nokia N-Gage QD first phone.
+WWE - played and broke bed in childhood.
+Best shawarma - New friends colony, Hyderabad, Abu Dhabhi local shop.
+Street Hawk - pulsar
+Comic books as kid - Chacha Chaudhri, Super Commando Dhruv, Nagraj, Doga (A-Dog), Pramanu-Man
+Created Family tree after speaking to nanima
+Egg boiler at nani house.
+Star wars screenX Mandolorian movie.
+Irritated by T2 terminal at Bangalore. Too big.
+Rey teacher fixes hair ever few minutes, can be turned into tequila shot game. Got confused bal and balak
+Jetter, Pilot pen in Childhood, greatest thing ever
+Rey screeming we don't have any money in mall story.
+Maldives - All you can eat inclusive resort
+Pattaya - kid focussed resort with rides etc.
+Hantavirus – cruise ship. 38% mortality.
+In next decade adults not being able to read, write will be the biggest challenge for mankind.
+The government banned Telegram to stop paper leaks. Next they'll ban roads to reduce accidents.
+2025-6 EvergreenSpaceX to acquire AI Coding startup Cursor for $60 Billion
+ZERODHA, GROWW, ANGEL ONE AND UPSTOX HAVE SECURED THE NOD TO OFFER INTERNATIONAL AND US STOCK INVESTING THROUGH GIFT CITY
+I, too, have decided not to build nukes in exchange for $300 billion
+BREAKING: B-52 Stratofortress has crashed in California
+You don't actually have to be good at your hobbies. You can just enjoy them and be bad at them.
+your frontal lobe is fully formed when you start to think birds are cool
+In this sovereign AI discussion, we are missing out a key strategic advantage: Create an LLM trained by Shashi Tharoor. Will be the best in the world. Simple.
+ww2 - HORN PLEASE ON KEROSENE".
+Ironically, the world's first trillionaire held an H-1B visa.
+million dollar idea. - A drink that clears caffeine from your system.
+The richest guy on Earth SHOULD be the guy making cutting edge cars and rockets instead of dudes who sell purses and perfumes or dudes who run investment firms or dudes who made Facebook.
+My housemates are convinced our house is haunted. I've lived here for 274 years and not noticed anything strange.
+in nature if a monkey hoarded 1 trillion bananas the other monkeys would beat that monkey to death and take his bananas
+Remember before HDMI cables where you had to match the colors to the TV like you were diffusing a bomb
+Protein drinks are a scam. One liter of milk contains 35 grams of protein and costs 50% less.
+"sir I need the original copy of your aadhar card" irony died multiple times in that sentence
+Who names a fingerprint reading machine Eklavya?
+An extreme weather-boosting El Niño has formed and is likely to be historically strong
+Never play fair in a game where others cheat.
+It's funny how much people care about 4K when the majority of actual movie theaters are barely above 1080p
+The reason margaritas taste so good is because they are a spiritually safe drink They have a salt circle that wards off evil
+"You can't solve problems with violence" *opens history book. Well well well
+INDIGO LAUNCHES BANGKOK TO VARANASI FLIGHTS. Netizens call it the 'Paap & Prayaschit' route
+computer scientist: we have created a dumbass virtual assistant which is constantly wrong, tech ceo - let's add it to every product!
+If a monkey hoarded a trillion bananas, all the monkeys would kill the monkey. but not us, not humans.
+Necessaity is not the mother of invention, idlesness, laziness is. to save one from trouble.
+Whoever designed wet wipe packs where you pull one out and four come with it should have been put in charge of ATMs.
+Claude Prompt - fix my life, make no mistakes
+Claude Mythos, fable
+In Indian families if you have an ice cream you can't cough for the next 2 months
+Once the rain ends, umbrella becomes a burden
+If you're lost right now go read the greats, Carl Jung, Nietzsche, Joseph Campbell, Kant, Hegel. Life makes more sense after it.
+FAANG -> MANGO (meta, apple/anthropic/alphabet, nvidia, google, openai)
+I asked my 90 year old Nani ma about secret to long life. she said she has never used MS Teams.
+Never ask a barber if you need a haircut
+Voter ID paradox: If only citizens can vote, why isn't a voter ID accepted as proof of citizenship? The argument that "fakes exist" applies equally to passports — so by that logic, no document qualifies. Either we trust the system or we don't.
+"Horn OK Please" and diesel history: During WW2, Britain redirected India's diesel to Europe. India switched to kerosene for trucks — which was volatile and caused accidents. The "OK" was a safety warning to maintain distance. A colonial footnote that's been on millions of trucks for decades.
+UK's Prime Minister problem: Britain now has an annual tradition of replacing a bad PM with a worse one. It's not a political cycle anymore — it's managed decline with better branding.
+Sovereign AI is a national security issue: Countries without their own LLMs will be dependent on foreign models for government, defence, and media. The nation that controls the model shapes the output — and the narrative.
+The case for a Shashi Tharoor-trained LLM: Half joke, full insight — an LLM's quality depends heavily on the quality of its training data. A model trained on genuinely sophisticated language would perform differently. We underinvest in linguistic diversity in AI.
+Get your data off the cloud: Centralised cloud dependency is a geopolitical and privacy risk. What feels like convenience is actually a single point of failure — for individuals and for nations.
+Distance to work affects quality of life more than almost anything else: More than salary, more than office perks. A 90-minute commute each way is a tax on your health, relationships, and time that no bonus compensates for.
+The 120–135 IQ trap: Smart enough to see all the problems, not powerful enough to solve them alone. The "slightly too smart" bracket is genuinely hard — you lose the comfort of ignorance without gaining the leverage of genius.
+Airports need a post office: You shouldn't have to throw away a full bottle of expensive perfume or discard a gift because of liquid restrictions. A simple mail-home service at security would be obvious if anyone actually thought about traveller experience.
+LinkedIn first-timers: The gap between how LinkedIn presents professional life and what professional life actually feels like is one of the great unacknowledged comedies of modern work.
+Hilo books
+Claude pro. Apps, websites, artifacts, publishing, domain
+Kollam trip.
+Subko ajji house coffee shop
+Messi vs Ronaldo. Kids.
+Japense Gin. Roku.
+Dentist visit Jayanagar.
+13july : biergarten lunch, kaleen bhaiya - 2nd marriage mention
+Created book for Rey
+Cottage leaf dinner`;
+const _ts = new Set();
+const TP = TPRAW.split("\n").map(x => x.trim()).filter(Boolean).filter(x => { const k = x.toLowerCase(); if (_ts.has(k)) return false; _ts.add(k); return true; });
+const LISTS = { words: WORDS, quotes: QUOTES, tp: TP };
+const pos = { words: 0, quotes: 0, tp: 0 };
+const LABEL = { words: "Word", quotes: "Quote", tp: "Item" };
+let original = items.slice();
+function setMode(m) {
+  if (m === mode) return;
+  pos[mode] = Math.max(0, original.indexOf(items[i]));
+  mode = m;
+  items = LISTS[m].slice();
+  original = items.slice();
+  i = pos[m];
+  qEl.value = ""; sEl.hidden = true; qEl.blur();
+  qEl.placeholder = "Search " + (m === "words" ? "words and phrases" : m === "quotes" ? "quotes" : "TP") + "…";
+  document.getElementById("tw").classList.toggle("on", m === "words");
+  document.getElementById("tq").classList.toggle("on", m === "quotes");
+  document.getElementById("tt").classList.toggle("on", m === "tp");
+  show();
+}
 let i = 0;
 const w = document.getElementById("w"), c = document.getElementById("c");
 
 function show() {
   const t = items[i];
   w.textContent = t;
+  document.getElementById("m").textContent = mode === "words" ? (MEAN[t.toLowerCase()] || "") : "";
   const n = t.length;
-  let vw = n <= 8 ? 14 : n <= 16 ? 10 : n <= 30 ? 6.5 : n <= 60 ? 4.2 : n <= 110 ? 3.2 : 2.5;
+  let vw = n <= 8 ? 14 : n <= 16 ? 10 : n <= 30 ? 6.5 : n <= 60 ? 4.2 : n <= 110 ? 3.2 : n <= 180 ? 2.6 : n <= 260 ? 2.2 : 1.9;
   w.style.fontSize = "min(" + vw + "vw, " + (vw * 1.1) + "vh)";
-  if (window.innerWidth < 700) w.style.fontSize = (n <= 8 ? 15 : n <= 16 ? 11 : n <= 30 ? 8 : n <= 60 ? 6 : n <= 110 ? 4.6 : 3.8) + "vw";
-  c.textContent = "Word " + (i + 1) + " of " + items.length;
+  if (window.innerWidth < 700) w.style.fontSize = (n <= 8 ? 15 : n <= 16 ? 11 : n <= 30 ? 8 : n <= 60 ? 6 : n <= 110 ? 4.6 : n <= 180 ? 4.2 : 3.8) + "vw";
+  c.textContent = LABEL[mode] + " " + (i + 1) + " of " + items.length;
 }
 function next() { i = (i + 1) % items.length; show(); }
 function skip(d) { i = Math.min(Math.max(i + d, 0), items.length - 1); show(); }
